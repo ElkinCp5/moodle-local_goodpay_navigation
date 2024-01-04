@@ -40,6 +40,6 @@ class renderer extends plugin_renderer_base {
      */
     public function render_main(main $main) {
         $template = $main->export_for_template($this);
-        return $this->render_from_template(PLUGINNAME . '/main', $template);
+        return $this->render_from_template(LOCAL_PLUGINNAME . '/main', $template);
     }
 }

@@ -29,29 +29,39 @@ require_once(dirname(__FILE__) . "/global.php");
 require_login();
 
 // Set up URL and page context.
-$pluginname = get_string('pluginname', PLUGINNAME);
+$pluginname = get_string('pluginname', LOCAL_PLUGINNAME);
 $url = new moodle_url("/");
 
 // Set up SQL query to retrieve order details.
-// $sql = "SELECT c.id, c.visible, c.fulname, e.enrol, cc.name
-//           FROM {course} c
-//           JOIN {enrol} e
-//             ON e.courseid = c.id
-//           JOIN {course_categories} cc
-//             ON cc.id = c.category";
+$faeye = '<i class="fa fa-eye" aria-hidden="true"></i>';
+$faeyeslash = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+$sql = "SELECT c.id,
+               c.category,
+               CASE WHEN c.visible = 1 THEN 'visible' ELSE 'hidden' END AS visible,
+               CASE WHEN c.visible = 1 THEN '$faeye' ELSE '$faeyeslash' END AS icon,
+               c.fullname,
+               GROUP_CONCAT(e.enrol SEPARATOR ', ') AS enrol,
+               cc.name
+          FROM {course} c
+          JOIN {enrol} e
+            ON e.courseid = c.id
+          JOIN {course_categories} cc
+            ON cc.id = c.category
+      GROUP BY c.id, c.category, c.visible, c.fullname, cc.name";
 
 // Get the details for the specified order from the database.
-// $courses = $DB->get_records_sql($sql);
+$courses = $DB->get_records_sql($sql);
 
 $PAGE->set_url($url);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title($pluginname);
-$PAGE->set_heading($pluginname);
+$PAGE->set_heading(get_string('setting', LOCAL_PLUGINNAME));
 
 // Get the page renderer and apply required CSS.
-$output = $PAGE->get_renderer(PLUGINNAME);
+$output = $PAGE->get_renderer(LOCAL_PLUGINNAME);
+$render = new \local_goodpay_navigation\output\main($courses);
 
 // Output the page header and render the main content.
 echo $output->header();
-// echo $output->render(new \local_goodpay_navigation\output\main($courses));
+echo $output->render($render);
 echo $output->footer();

@@ -28,3 +28,15 @@ $string['goodpaycoupon'] = 'Goodpay Coupons';
 $string['goodpayenable'] = 'Goodpay Enable';
 $string['goodpaycourses'] = 'Goodpay Courses';
 $string['goodpaysettings'] = 'Goodpay Settings';
+
+// UI TEMPLATE
+$string['order'] = 'Orders';
+$string['coupon'] = 'Coupons';
+$string['enable'] = 'Enable';
+$string['disable'] = 'Disable';
+$string['goodpay'] = 'Goodpay';
+$string['setting'] = 'Setting';
+$string['activategoodpay'] = 'Activate goodpay in {$a}';
+$string['tooltip:action'] = 'Click for {$a} course enrolment goodpay plugin';
+$string['registrationsystems'] = 'Systems: ';
+$string['category'] = 'Category: <span class="badge badge-primary" style="padding: .45em .8em;">{$a}</span>';

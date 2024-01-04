@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2024010213;
+$plugin->version = 2024010400;
 $plugin->requires = 2018120300;
 $plugin->release = '0.0.1';
 $plugin->component = 'local_goodpay_navigation';

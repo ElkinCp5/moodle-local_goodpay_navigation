@@ -23,6 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('NAME', 'local_goodpay_navigation');
-define('PLUGINURL', 'local/goodpay_navigation');
-define('PLUGINNAME', 'local_goodpay_navigation');
+define('NAME', 'goodpay');
+define('LOCAL_NAME', 'goodpay_navigation');
+define('LOCAL_PLUGINURL', 'local/goodpay_navigation');
+define('LOCAL_PLUGINNAME', 'local_goodpay_navigation');

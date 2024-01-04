@@ -33,7 +33,9 @@ use templatable;
 use stdClass;
 use moodle_url;
 
-use enrol_goodpay\query;
+use enrol_goodpay\helper;
+use \core_course\external\course_summary_exporter;
+use \core\plugininfo\enrol;
 
 require_once("$CFG->dirroot/lib/enrollib.php");
 
@@ -52,10 +54,9 @@ class main implements renderable, templatable {
     /**
      * Constructor.
      *
-     * @param stdClass $courses
-     * @param array  $config
+     * @param array $courses
      */
-    public function __construct(stdClass $courses) {
+    public function __construct(array $courses) {
         $this->instance = $courses;
     }
 
@@ -66,19 +67,80 @@ class main implements renderable, templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-        global $USER;
+        global $USER, $CFG, $DB;
 
         profile_load_data($USER);
         ob_start();
 
-        if (get_config(PLUGINNAME, 'status')) {
-            return false;
+        $config = $DB->get_field('config', 'value', array('name' => 'enrol_plugins_enabled'));
+        $status = helper::strpos($config, NAME);
+        $home = new moodle_url('/');
+        $statustext = 'disable';
+        $icon = 'fa-eye';
+        $button = 'primary';
+
+        $courses = array();
+
+        foreach ($this->instance as $course) {
+            helper::get_course_image($course);
+            $enrols = array();
+            $enrolnames = explode(',', $course->enrol);
+            $enrolurl = new moodle_url('/enrol/editinstance.php', array('courseid' => $course->id, 'type' => NAME));
+            $enrolurl = helper::url_clear($enrolurl);
+
+            if (is_array($enrolnames)) {
+                foreach ($enrolnames as $name) {
+                    $has = ($name == NAME) && $status;
+                    $setting = get_config(LOCAL_PLUGINNAME, 'setting');
+                    array_push($enrols, array(
+                        'name' => $has ? "$setting: $name" : $name,
+                        'url' => $has ? $enrolurl : '',
+                    ));
+                }
+            }
+
+            $course->enrolurl = $enrolurl;
+            $course->hasgoodpay = helper::strpos($course->enrol, NAME) && $status;
+            $course->enrol = $enrols;
+
+            array_push($courses, $course);
         }
 
-        $courses = $this->instance;
+        if (!$status) {
+            $statustext = 'enable';
+            $icon = 'fa-eye-slash';
+            $button = 'secondary';
+        }
+
+        $links = array(
+            array(
+                "name" => get_string('setting', LOCAL_PLUGINNAME),
+                "url" => helper::url_clear(new moodle_url(NAV_SETTINGS))
+            ),
+            array(
+                "name" => get_string('coupon', LOCAL_PLUGINNAME),
+                "url" => helper::url_clear(new moodle_url(NAV_COUPON))
+            ),
+            array(
+                "name" => get_string('order', LOCAL_PLUGINNAME),
+                "url" => helper::url_clear(new moodle_url(NAV_ORDER))
+            ),
+        );
+
+        $action = array(
+            "name" => get_string($statustext, LOCAL_PLUGINNAME),
+            "icon" => "<i class='fa $icon mr-2' aria-hidden='true'></i>",
+            "url" => helper::url_clear(new moodle_url(NAV_ENABLE)),
+            "class" => $button
+        );
 
         return [
+            'home' => $home,
+            'links' => $links,
+            'action' => $action,
+            'status' => $status,
             'courses' => $courses,
+            'hascourses' => (is_array($courses) && count($courses)),
         ];
     }
 }

@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__, 3) . '/enrol/goodpay/global.php');
-require_once('/global.php');
+require_once(dirname(__FILE__) . '/global.php');
 
 function itemis_navigation() {
     return array();
@@ -40,7 +40,7 @@ function itemis_navigation() {
  */
 function local_goodpay_navigation_extend_navigation(navigation_node $nav) {
 
-    $pluginname = get_string('pluginname', PLUGINNAME);
+    $pluginname = get_string('pluginname', LOCAL_PLUGINNAME);
     $node = $nav->add($pluginname);
     // Ruta para ir al enrol /enrol/editinstance.php?type=goodpay&courseid=$id
     // Ruta para activar enrol payment /admin/settings.php?section=manageenrols
@@ -48,51 +48,51 @@ function local_goodpay_navigation_extend_navigation(navigation_node $nav) {
 
     if (is_siteadmin()) {
         $enable = navigation_node::create(
-            get_string('goodpayenable', PLUGINNAME),
+            get_string('goodpayenable', LOCAL_PLUGINNAME),
             new moodle_url(NAV_ENABLE),
             navigation_node::TYPE_CUSTOM,
-            'goodpayenable',
-            'goodpayenable',
+            'enable',
+            'enable',
             new pix_icon('i/permissions', '')
         );
         $enable->showinflatnavigation = true;
         $node = $node->add_node($enable);
 
         $settings = navigation_node::create(
-            get_string('goodpaysettings', PLUGINNAME),
+            get_string('goodpaysettings', LOCAL_PLUGINNAME),
             new moodle_url(NAV_SETTINGS),
             navigation_node::TYPE_CUSTOM,
-            'goodpeysettings',
-            'goodpeysettings',
+            'settings',
+            'settings',
             new pix_icon('i/permissions', '')
         );
         $settings->showinflatnavigation = true;
         $node = $node->add_node($settings);
 
         $coupons = navigation_node::create(
-            get_string('goodpaycoupon', PLUGINNAME),
+            get_string('goodpaycoupon', LOCAL_PLUGINNAME),
             new moodle_url(NAV_COUPON),
             navigation_node::TYPE_CUSTOM,
-            'goodpaycoupon',
-            'goodpaycoupon',
+            'coupons',
+            'coupons',
             new pix_icon('i/permissions', '')
         );
         $coupons->showinflatnavigation = true;
         $node = $node->add_node($coupons);
 
         $courses = navigation_node::create(
-            get_string('goodpaycourses', PLUGINNAME),
+            get_string('goodpaycourses', LOCAL_PLUGINNAME),
             new moodle_url(NAV_ORDER),
             navigation_node::TYPE_CUSTOM,
             'courses',
-            'orders',
+            'courses',
             new pix_icon('i/report', 'report')
         );
         $courses->showinflatnavigation = true;
         $node->add_node($courses);
 
         $orders = navigation_node::create(
-            get_string('goodpayorder', PLUGINNAME),
+            get_string('goodpayorder', LOCAL_PLUGINNAME),
             new moodle_url(NAV_ORDER),
             navigation_node::TYPE_CUSTOM,
             'orders',
