@@ -27,6 +27,7 @@ require_once(dirname(__FILE__, 3) . "/config.php");
 require_once(dirname(__FILE__) . "/global.php");
 
 require_login();
+$PAGE->requires->js_call_amd(LOCAL_PLUGINNAME . '/stateswitch', 'init', []);
 
 // Set up URL and page context.
 $pluginname = get_string('pluginname', LOCAL_PLUGINNAME);

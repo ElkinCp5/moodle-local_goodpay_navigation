@@ -52,14 +52,13 @@
         {{/ links }}
     </ul>
     {{# action }}
-        <button
-        id="btn-enable"
-        data-url="{{url}}"
+        <a
+        href="{{url}}"
         data-toggle="tooltip"
         title="{{#str}}tooltip:action, local_goodpay_navigation, {{name}}{{/str}}"
         class="btn btn-outline-{{class}} btn-sm my-2 my-sm-0">
         {{{icon}}} {{name}}
-        </button>
+        </a>
     {{/ action }}
   </div>
 </nav>
@@ -76,25 +75,25 @@
       </div>
       <p class="mb-1">
         {{#str}}registrationsystems, local_goodpay_navigation{{/str}}
-      {{# enrol }}
-        {{# url }}
-        <a class="badge badge-primary" href="{{url}}" target="_blank" >{{name}}</a>
-        {{/ url }}
-        {{^ url }}
-        <span class="badge badge-light">{{name}}</span>
-        {{/ url }}
-      {{/ enrol }}
+        {{# enrolments }}
+          {{# url }}
+          <a class="badge badge-primary" href="{{url}}" target="_blank" >{{name}}</a>
+          {{/ url }}
+          {{^ url }}
+          <span class="badge badge-light">{{name}}</span>
+          {{/ url }}
+        {{/ enrolments }}
       </p>
       {{# name }}
-      <small>
-        {{#str}}category, local_goodpay_navigation, {{name}}{{/str}}
-      </small>
+        <small>
+          {{#str}}category, local_goodpay_navigation, {{name}}{{/str}}
+        </small>
       {{/ name }}
       {{# status }}
-      <a class="btn btn-outline-primary btn-sm btn-block mt-4" href="{{{url}}}" target="_blank">
-        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-        {{#str}}activategoodpay, local_goodpay_navigation, {{fullname}}{{/str}}
-      </a>
+        <a class="btn btn-outline-primary btn-sm btn-block mt-4" href="{{{enrolurl}}}" target="_blank">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          {{#str}}activategoodpay, local_goodpay_navigation, {{fullname}}{{/str}}
+        </a>
       {{/ status }}
     </div>
     {{/ courses }}

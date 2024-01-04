@@ -67,7 +67,7 @@ class main implements renderable, templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-        global $USER, $CFG, $DB;
+        global $USER, $SESSION, $DB;
 
         profile_load_data($USER);
         ob_start();
@@ -83,7 +83,7 @@ class main implements renderable, templatable {
 
         foreach ($this->instance as $course) {
             helper::get_course_image($course);
-            $enrols = array();
+            $enrolments = array();
             $enrolnames = explode(',', $course->enrol);
             $enrolurl = new moodle_url('/enrol/editinstance.php', array('courseid' => $course->id, 'type' => NAME));
             $enrolurl = helper::url_clear($enrolurl);
@@ -92,7 +92,7 @@ class main implements renderable, templatable {
                 foreach ($enrolnames as $name) {
                     $has = ($name == NAME) && $status;
                     $setting = get_config(LOCAL_PLUGINNAME, 'setting');
-                    array_push($enrols, array(
+                    array_push($enrolments, array(
                         'name' => $has ? "$setting: $name" : $name,
                         'url' => $has ? $enrolurl : '',
                     ));
@@ -101,7 +101,7 @@ class main implements renderable, templatable {
 
             $course->enrolurl = $enrolurl;
             $course->hasgoodpay = helper::strpos($course->enrol, NAME) && $status;
-            $course->enrol = $enrols;
+            $course->enrolments = $enrolments;
 
             array_push($courses, $course);
         }
@@ -127,10 +127,11 @@ class main implements renderable, templatable {
             ),
         );
 
+        $parms = array('sesskey' => sesskey(), 'action' => $statustext, 'enrol' => 'goodpay');
         $action = array(
             "name" => get_string($statustext, LOCAL_PLUGINNAME),
             "icon" => "<i class='fa $icon mr-2' aria-hidden='true'></i>",
-            "url" => helper::url_clear(new moodle_url(NAV_ENABLE)),
+            "url" => helper::url_clear(new moodle_url('/admin/enrol.php', $parms)),
             "class" => $button
         );
 
