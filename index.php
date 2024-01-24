@@ -38,10 +38,11 @@ $faeye = '<i class="fa fa-eye" aria-hidden="true"></i>';
 $faeyeslash = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 $sql = "SELECT c.id,
                c.category,
+               c.fullname,
                CASE WHEN c.visible = 1 THEN 'visible' ELSE 'hidden' END AS visible,
                CASE WHEN c.visible = 1 THEN '$faeye' ELSE '$faeyeslash' END AS icon,
-               c.fullname,
                GROUP_CONCAT(e.enrol SEPARATOR ', ') AS enrol,
+               e.id AS enrolid,
                cc.name
           FROM {course} c
           JOIN {enrol} e

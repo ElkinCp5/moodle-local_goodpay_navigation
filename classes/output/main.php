@@ -30,14 +30,12 @@ defined('MOODLE_INTERNAL') || die();
 use renderable;
 use renderer_base;
 use templatable;
-use stdClass;
 use moodle_url;
 
 use enrol_goodpay\helper;
-use \core_course\external\course_summary_exporter;
-use \core\plugininfo\enrol;
 
 require_once("$CFG->dirroot/lib/enrollib.php");
+require_once(dirname(__FILE__, 3) . "/global.php");
 
 /**
  * Renderable main class.
@@ -67,7 +65,7 @@ class main implements renderable, templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-        global $USER, $SESSION, $DB;
+        global $USER, $DB;
 
         profile_load_data($USER);
         ob_start();
@@ -85,7 +83,10 @@ class main implements renderable, templatable {
             helper::get_course_image($course);
             $enrolments = array();
             $enrolnames = explode(',', $course->enrol);
-            $enrolurl = new moodle_url('/enrol/editinstance.php', array('courseid' => $course->id, 'type' => NAME));
+            $enrolurl = new moodle_url(
+                '/enrol/editinstance.php',
+                array('courseid' => $course->id, 'id' => $course->enrolid, 'type' => NAME)
+            );
             $enrolurl = helper::url_clear($enrolurl);
 
             if (is_array($enrolnames)) {
