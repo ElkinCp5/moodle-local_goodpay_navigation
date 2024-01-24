@@ -92,9 +92,8 @@ class main implements renderable, templatable {
             if (is_array($enrolnames)) {
                 foreach ($enrolnames as $name) {
                     $has = ($name == NAME) && $status;
-                    $setting = get_config(LOCAL_PLUGINNAME, 'setting');
                     array_push($enrolments, array(
-                        'name' => $has ? "$setting: $name" : $name,
+                        'name' => $has ? get_config('setting', LOCAL_PLUGINNAME) . ": $name" : $name,
                         'url' => $has ? $enrolurl : '',
                     ));
                 }
