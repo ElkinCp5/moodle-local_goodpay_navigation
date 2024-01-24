@@ -46,7 +46,7 @@ $sql = "SELECT c.id,
                cc.name
           FROM {course} c
           JOIN {enrol} e
-            ON e.courseid = c.id
+            ON e.courseid = c.id AND e.enrol = '" . NAME . "'
           JOIN {course_categories} cc
             ON cc.id = c.category
       GROUP BY c.id, c.category, c.visible, c.fullname, cc.name";
